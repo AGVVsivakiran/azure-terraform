@@ -4,7 +4,7 @@ resource "aws_instance" "crm-web-server" {
   instance_type = "t2.micro"
   subnet_id = aws_subnet.crm-web-sn.id
   key_name = "ravi-oero"
-  vpc_security_group_ids = aws_security_group.crm-web-sg.id
+  vpc_security_group_ids = [aws_security_group.crm-web-sg.id]
   user_data = file("setup.sh")
     tags = {
     Name = "crm-web-server"
