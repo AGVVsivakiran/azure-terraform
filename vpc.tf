@@ -223,3 +223,74 @@ resource "aws_vpc_security_group_egress_rule" "crm-web-sg-egress" {
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
+
+# crm api secuirty group
+resource "aws_security_group" "crm-api-sg" {
+  name        = "crm-api-sg"
+  description = "Allow SSH & Nodejs traffic"
+  vpc_id      = aws_vpc.crm-vpc.id
+
+  tags = {
+    Name = "crm-api-sg"
+  }
+}
+
+# crm api secuirty group - ingress
+resource "aws_vpc_security_group_ingress_rule" "crm-api-sg-ingress-ssh" {
+  security_group_id = aws_security_group.crm-api-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
+
+resource "aws_vpc_security_group_ingress_rule" "crm-api-sg-ingress-nodejs" {
+  security_group_id = aws_security_group.crm-api-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 8080
+  ip_protocol       = "tcp"
+  to_port           = 8080
+}
+
+# crm api secuirty group - egress
+resource "aws_vpc_security_group_egress_rule" "crm-api-sg-egress" {
+  security_group_id = aws_security_group.crm-api-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
+
+
+# crm db secuirty group
+resource "aws_security_group" "crm-db-sg" {
+  name        = "crm-db-sg"
+  description = "Allow SSH & Postgres traffic"
+  vpc_id      = aws_vpc.crm-vpc.id
+
+  tags = {
+    Name = "crm-db-sg"
+  }
+}
+
+# crm db secuirty group - ingress
+resource "aws_vpc_security_group_ingress_rule" "crm-db-sg-ingress-ssh" {
+  security_group_id = aws_security_group.crm-db-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
+
+resource "aws_vpc_security_group_ingress_rule" "crm-db-sg-ingress-postgres" {
+  security_group_id = aws_security_group.crm-db-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 5432
+  ip_protocol       = "tcp"
+  to_port           = 5432
+}
+
+# crm db secuirty group - egress
+resource "aws_vpc_security_group_egress_rule" "crm-api-sg-egress" {
+  security_group_id = aws_security_group.crm-api-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
